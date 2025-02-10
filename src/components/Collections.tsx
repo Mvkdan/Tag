@@ -1,68 +1,130 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card } from './ui/card';
-import { Shield, Diamond, Crown, Star } from 'lucide-react';
 import { Button } from './ui/button';
-
-const products = [
-  {
-    name: "AirTag Classic",
-    price: "35€",
-    description: "Protection élégante pour vos objets quotidiens",
-    icon: Shield,
-    color: "bg-primary/10",
-    iconColor: "text-primary"
-  },
-  {
-    name: "AirTag Premium",
-    price: "45€",
-    description: "Finitions luxueuses et design raffiné",
-    icon: Diamond,
-    color: "bg-primary-dark/10",
-    iconColor: "text-primary-dark"
-  },
-  {
-    name: "AirTag Gold Edition",
-    price: "65€",
-    description: "Une édition limitée plaquée or",
-    icon: Crown,
-    color: "bg-luxury-gold/10",
-    iconColor: "text-luxury-gold"
-  },
-  {
-    name: "AirTag Limited",
-    price: "55€",
-    description: "Une série spéciale en édition limitée",
-    icon: Star,
-    color: "bg-accent/10",
-    iconColor: "text-accent"
-  }
-];
+import { Heart, Minus, Plus, Star } from 'lucide-react';
+import { toast } from './ui/use-toast';
 
 const Collections = () => {
+  const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState('');
+  
+  const sizes = ['S', 'M', 'L', 'XL'];
+  
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      toast({
+        title: "Veuillez sélectionner une taille",
+        variant: "destructive"
+      });
+      return;
+    }
+    toast({
+      title: "Produit ajouté au panier",
+      description: `${quantity} x AirTag Protection - Taille ${selectedSize}`
+    });
+  };
+
   return (
     <section className="py-24 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-playfair text-center mb-16">
-          Découvrez nos Collections
-        </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {products.map((product, index) => (
-            <Card key={index} className="group hover:shadow-lg transition-shadow duration-300">
-              <div className="p-8 text-center">
-                <div className={`w-20 h-20 mx-auto mb-6 rounded-full ${product.color} flex items-center justify-center transition-transform group-hover:scale-110 duration-300`}>
-                  <product.icon className={`w-10 h-10 ${product.iconColor}`} />
+        <Card className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 p-6 md:p-8">
+            {/* Image Section */}
+            <div className="relative">
+              <img 
+                src="/lovable-uploads/c4d34119-cd16-4268-b4f9-d49f038af7f3.png"
+                alt="AirTag Protection Premium" 
+                className="w-full h-auto rounded-lg"
+              />
+              <button className="absolute top-4 right-4 p-2 bg-white rounded-full shadow-lg hover:scale-110 transition-transform">
+                <Heart className="w-6 h-6 text-gray-600" />
+              </button>
+            </div>
+
+            {/* Product Details Section */}
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-3xl font-playfair mb-2">AirTag Protection Premium</h2>
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star key={star} className="w-5 h-5 fill-primary text-primary" />
+                    ))}
+                  </div>
+                  <span className="text-sm text-gray-600">(125 avis)</span>
                 </div>
-                <h3 className="text-2xl font-playfair mb-2">{product.name}</h3>
-                <p className="text-xl font-semibold mb-2">{product.price}</p>
-                <p className="text-gray-600 mb-6">{product.description}</p>
-                <Button className="w-full bg-primary hover:bg-primary-dark transition-colors">
+                <p className="text-2xl font-semibold text-primary">45.00 €</p>
+              </div>
+
+              {/* Size Selector */}
+              <div className="space-y-4">
+                <h3 className="font-medium">Taille</h3>
+                <div className="flex gap-3">
+                  {sizes.map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={`w-12 h-12 rounded-lg border-2 flex items-center justify-center transition-all ${
+                        selectedSize === size 
+                          ? 'border-primary bg-primary/10 text-primary' 
+                          : 'border-gray-200 hover:border-primary/50'
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quantity Selector */}
+              <div className="space-y-4">
+                <h3 className="font-medium">Quantité</h3>
+                <div className="flex items-center gap-4">
+                  <button 
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="p-2 rounded-lg border-2 border-gray-200 hover:border-primary/50 transition-colors"
+                  >
+                    <Minus className="w-5 h-5" />
+                  </button>
+                  <span className="w-12 text-center text-xl">{quantity}</span>
+                  <button 
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="p-2 rounded-lg border-2 border-gray-200 hover:border-primary/50 transition-colors"
+                  >
+                    <Plus className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="space-y-3 pt-4">
+                <Button 
+                  onClick={handleAddToCart}
+                  className="w-full bg-primary hover:bg-primary-dark text-lg py-6"
+                >
                   Ajouter au panier
                 </Button>
+                <Button 
+                  variant="outline"
+                  className="w-full text-lg py-6 border-2"
+                >
+                  Acheter maintenant
+                </Button>
               </div>
-            </Card>
-          ))}
-        </div>
+
+              {/* Description */}
+              <div className="pt-6 border-t">
+                <h3 className="font-medium mb-2">Description</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Protection premium pour votre AirTag avec un design élégant et des finitions luxueuses. 
+                  Fabriqué à partir de matériaux haut de gamme pour une protection optimale de votre 
+                  dispositif tout en conservant son style raffiné.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Card>
       </div>
     </section>
   );
