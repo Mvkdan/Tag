@@ -26,18 +26,27 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#9b87f5",
-          light: "#FFDEE2", // Rose poudré
-          dark: "#7E69AB",
+          DEFAULT: "#FF87B2",
+          light: "#FFE5ED",
+          dark: "#E85C8F",
         },
         secondary: {
-          DEFAULT: "#FDE1D3", // Pêche doux
-          light: "#C8C8C9", // Gris perle
+          DEFAULT: "#FDE1D3",
+          light: "#FFF5F0",
         },
         accent: {
-          DEFAULT: "#D6BCFA",
+          DEFAULT: "#F1E4FF",
           foreground: "#1A1F2C",
         },
+      },
+      boxShadow: {
+        'soft': '0 4px 20px rgba(0, 0, 0, 0.05)',
+        'glow': '0 0 30px rgba(255, 135, 178, 0.2)',
+      },
+      borderRadius: {
+        'xl': '1rem',
+        '2xl': '1.5rem',
+        '3xl': '2rem',
       },
       keyframes: {
         "accordion-down": {
@@ -56,12 +65,17 @@ export default {
           from: { opacity: "0", transform: "translateY(20px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         float: "float 6s ease-in-out infinite",
         fadeIn: "fadeIn 0.5s ease-out forwards",
+        shimmer: "shimmer 8s linear infinite",
       },
     },
   },
