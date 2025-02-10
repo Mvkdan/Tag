@@ -29,10 +29,10 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      {/* Fond bleu uni */}
-      <div className="absolute inset-0 bg-luxury-blue" />
+      {/* Fond bleu turquoise uni */}
+      <div className="absolute inset-0 bg-[#40BCD8]" />
       
-      {/* Wave avec un seul creux */}
+      {/* Wave simplifiée avec un seul creux */}
       <div className="absolute inset-0">
         <svg
           className="absolute bottom-0 w-full h-48"
@@ -41,7 +41,7 @@ const HeroSection = () => {
           fill="white"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path d="M0,160 C480,320 960,320 1440,160 L1440,320 L0,320 Z" />
+          <path d="M0,192 C480,320 960,320 1440,192 L1440,320 L0,320 Z" />
         </svg>
       </div>
 

@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { ShoppingCart, Star } from 'lucide-react';
+import { ShoppingCart, Star, Menu } from 'lucide-react';
 import { Button } from './ui/button';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen bg-background">
-      <div className="relative bg-[#F2FCE2] text-luxury-black py-2 overflow-hidden">
+      <div className="relative bg-[#4CAF50] text-white py-2 overflow-hidden">
         <div className="animate-[marquee_20s_linear_infinite] whitespace-nowrap inline-block">
           <span className="mx-4">Livraison offerte dans notre écrin signature</span>
           <span className="mx-4">•</span>
@@ -17,24 +17,27 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <span className="mx-4">Retours gratuits sous 30 jours</span>
         </div>
       </div>
-      <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b">
+      <nav className="fixed w-full z-50 bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" className="text-luxury-black">Collections</Button>
-              <Button variant="ghost" className="text-luxury-black">Personnalisation</Button>
+            <Button variant="ghost" className="lg:hidden">
+              <Menu className="w-6 h-6" />
+            </Button>
+            <div className="hidden lg:flex items-center space-x-8">
+              <Button variant="link" className="text-black font-normal">Collections</Button>
+              <Button variant="link" className="text-black font-normal">Personnalisation</Button>
             </div>
             <a href="/" className="absolute left-1/2 transform -translate-x-1/2">
-              <h1 className="font-playfair text-2xl tracking-widest text-luxury-black">FINELY</h1>
+              <h1 className="font-playfair text-3xl tracking-widest text-black">FINELY</h1>
             </a>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center text-luxury-black">
-                <Star className="w-4 h-4 mr-1" />
+            <div className="flex items-center space-x-6">
+              <div className="hidden lg:flex items-center text-black gap-1">
+                <Star className="w-4 h-4" />
                 <span className="text-sm">4.9/5</span>
               </div>
-              <Button variant="ghost" className="flex items-center gap-2 text-luxury-black">
+              <Button variant="ghost" className="text-black px-0">
                 <ShoppingCart className="w-5 h-5" />
-                <span>Panier</span>
+                <span className="hidden lg:inline ml-2">Panier</span>
               </Button>
             </div>
           </div>
