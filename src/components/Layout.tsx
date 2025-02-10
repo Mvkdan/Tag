@@ -16,34 +16,36 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <span className="mx-4">Subscribe & Save 10%</span>
         </div>
       </div>
-      <nav className="fixed w-full z-50 bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <Button variant="ghost" className="lg:hidden p-0">
-              <Menu className="w-6 h-6" />
-            </Button>
-            <div className="hidden lg:flex items-center space-x-8">
-              <Link to="/product">
-                <Button variant="link" className="text-black font-light tracking-wider">Collections</Button>
-              </Link>
-            </div>
-            <Link to="/" className="absolute left-1/2 transform -translate-x-1/2">
-              <h1 className="font-playfair text-4xl tracking-widest text-black">FINELY</h1>
-            </Link>
-            <div className="flex items-center gap-4">
-              <Link to="/profile">
-                <Button variant="ghost" className="text-black hover:bg-transparent hover:text-black p-0">
-                  <User className="w-5 h-5" />
-                </Button>
-              </Link>
-              <Button variant="ghost" className="text-black hover:bg-transparent hover:text-black p-0">
-                <span className="hidden lg:inline mr-2 font-light tracking-wider">Commander</span>
-                <ShoppingCart className="w-5 h-5" />
+      <div className="fixed w-full z-50 px-4 pt-4">
+        <nav className="container mx-auto bg-white rounded-xl shadow-luxury">
+          <div className="px-6 py-4">
+            <div className="flex justify-between items-center">
+              <Button variant="ghost" className="lg:hidden p-0">
+                <Menu className="w-6 h-6" />
               </Button>
+              <div className="hidden lg:flex items-center space-x-8">
+                <Link to="/product">
+                  <Button variant="link" className="text-black font-light tracking-wider">Collections</Button>
+                </Link>
+              </div>
+              <Link to="/" className="absolute left-1/2 transform -translate-x-1/2">
+                <h1 className="font-playfair text-4xl tracking-widest text-black">FINELY</h1>
+              </Link>
+              <div className="flex items-center gap-4">
+                <Link to="/profile">
+                  <Button variant="ghost" className="text-black hover:bg-transparent hover:text-black p-0">
+                    <User className="w-5 h-5" />
+                  </Button>
+                </Link>
+                <Button variant="ghost" className="text-black hover:bg-transparent hover:text-black p-0">
+                  <span className="hidden lg:inline mr-2 font-light tracking-wider">Commander</span>
+                  <ShoppingCart className="w-5 h-5" />
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
       <main className="pt-28">
         {children}
       </main>
