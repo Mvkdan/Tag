@@ -30,16 +30,17 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         luxury: {
-          gold: "#D4AF37",
+          blue: "#40BCD8",
+          green: "#4CAF50",
           beige: "#F5F5DC",
           cream: "#FFFDD0",
           black: "#1A1A1A",
           white: "#FFFFFF",
         },
         primary: {
-          DEFAULT: "#D4AF37",
-          light: "#F5E6CC",
-          dark: "#B38B28",
+          DEFAULT: "#40BCD8",
+          light: "#7dd3fc",
+          dark: "#0284c7",
         },
         secondary: {
           DEFAULT: "#F5F5DC",
@@ -52,8 +53,8 @@ export default {
       },
       boxShadow: {
         'soft': '0 4px 20px rgba(0, 0, 0, 0.05)',
-        'glow': '0 0 30px rgba(212, 175, 55, 0.2)',
-        'luxury': '0 4px 30px rgba(212, 175, 55, 0.1)',
+        'glow': '0 0 30px rgba(14, 165, 233, 0.2)',
+        'luxury': '0 4px 30px rgba(14, 165, 233, 0.1)',
       },
       borderRadius: {
         'xl': '1rem',
@@ -92,6 +93,23 @@ export default {
         wave: {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' },
+        },
+        typing: {
+          "0%": {
+            width: "0%",
+            visibility: "hidden"
+          },
+          "100%": {
+            width: "100%"
+          }
+        },
+        blink: {
+          "50%": {
+            borderColor: "transparent"
+          },
+          "100%": {
+            borderColor: "#0EA5E9"
+          }
         }
       },
       animation: {
@@ -102,6 +120,7 @@ export default {
         shimmer: "shimmer 8s linear infinite",
         slideDown: "slideDown 0.5s ease-out",
         wave: "wave 15s linear infinite",
+        typing: "typing 2s steps(20) infinite alternate, blink .7s infinite"
       },
     },
   },
