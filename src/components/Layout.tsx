@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { ShoppingCart, Star, Menu } from 'lucide-react';
+import { ShoppingCart, Menu } from 'lucide-react';
 import { Button } from './ui/button';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -8,38 +7,29 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <div className="min-h-screen bg-background">
       <div className="relative bg-[#4CAF50] text-white py-2 overflow-hidden">
         <div className="animate-[marquee_20s_linear_infinite] whitespace-nowrap inline-block">
-          <span className="mx-4">Livraison offerte dans notre écrin signature</span>
+          <span className="mx-4">Subscribe & Save 10%</span>
           <span className="mx-4">•</span>
-          <span className="mx-4">Service de gravure personnalisée offert</span>
+          <span className="mx-4">Subscribe & Save 10%</span>
           <span className="mx-4">•</span>
-          <span className="mx-4">Garantie à vie sur tous nos produits</span>
-          <span className="mx-4">•</span>
-          <span className="mx-4">Retours gratuits sous 30 jours</span>
+          <span className="mx-4">Subscribe & Save 10%</span>
         </div>
       </div>
       <nav className="fixed w-full z-50 bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <Button variant="ghost" className="lg:hidden">
+            <Button variant="ghost" className="lg:hidden p-0">
               <Menu className="w-6 h-6" />
             </Button>
             <div className="hidden lg:flex items-center space-x-8">
-              <Button variant="link" className="text-black font-normal">Collections</Button>
-              <Button variant="link" className="text-black font-normal">Personnalisation</Button>
+              <Button variant="link" className="text-black font-light tracking-wider">Collections</Button>
             </div>
             <a href="/" className="absolute left-1/2 transform -translate-x-1/2">
-              <h1 className="font-playfair text-3xl tracking-widest text-black">FINELY</h1>
+              <h1 className="font-playfair text-4xl tracking-widest text-black">FINELY</h1>
             </a>
-            <div className="flex items-center space-x-6">
-              <div className="hidden lg:flex items-center text-black gap-1">
-                <Star className="w-4 h-4" />
-                <span className="text-sm">4.9/5</span>
-              </div>
-              <Button variant="ghost" className="text-black px-0">
-                <ShoppingCart className="w-5 h-5" />
-                <span className="hidden lg:inline ml-2">Panier</span>
-              </Button>
-            </div>
+            <Button variant="ghost" className="text-black hover:bg-transparent hover:text-black p-0">
+              <span className="hidden lg:inline mr-2 font-light tracking-wider">Commander</span>
+              <ShoppingCart className="w-5 h-5" />
+            </Button>
           </div>
         </div>
       </nav>

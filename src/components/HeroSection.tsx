@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button } from './ui/button';
-import { Star, Crown, Shield, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 const HeroSection = () => {
   const [typedText, setTypedText] = useState("");
@@ -29,10 +29,8 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      {/* Fond bleu turquoise uni */}
       <div className="absolute inset-0 bg-[#40BCD8]" />
       
-      {/* Wave simplifiée avec un seul creux */}
       <div className="absolute inset-0">
         <svg
           className="absolute bottom-0 w-full h-48"
@@ -47,10 +45,6 @@ const HeroSection = () => {
 
       <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center relative">
         <div className="space-y-8 animate-fadeIn">
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm text-luxury-black rounded-full shadow-luxury">
-            <Crown className="w-4 h-4 text-luxury-blue" />
-            <span className="text-sm font-light tracking-wider">Collection Signature</span>
-          </span>
           <div className="space-y-2">
             <h1 className="font-playfair text-5xl md:text-7xl xl:text-8xl font-light leading-tight text-white">
               Design
@@ -68,33 +62,18 @@ const HeroSection = () => {
           </p>
           <div className="flex flex-wrap gap-4">
             <Button size="lg" className="bg-white text-luxury-blue hover:bg-white/90 rounded-full shadow-luxury transition-all duration-300 group">
-              Découvrir la Collection
+              Commander
               <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button size="lg" variant="outline" className="rounded-full border-white text-white hover:bg-white hover:text-luxury-blue transition-all duration-300">
-              Service Personnalisation
-            </Button>
-          </div>
-          <div className="flex items-center gap-6 mt-8">
-            <div className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-luxury">
-              <Star className="w-4 h-4 text-luxury-blue" />
-              <span className="text-sm">13,000+ Avis 5★</span>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-luxury">
-              <Shield className="w-4 h-4 text-luxury-blue" />
-              <span className="text-sm">Garantie à Vie</span>
-            </div>
           </div>
         </div>
-        <div className="relative h-[500px] lg:h-[700px]">
+        <div className="relative h-[500px] lg:h-[700px] flex items-center justify-center">
           <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/20 rounded-[30%] blur-3xl animate-float" />
-          <div className="relative z-10 w-full h-full rounded-[30%] overflow-hidden shadow-luxury animate-float">
-            <img 
-              src="/photo-1581091226825-a6a2a5aee158" 
-              alt="AirTag Signature en situation" 
-              className="w-full h-full object-cover"
-            />
-          </div>
+          <img 
+            src="/lovable-uploads/c4d34119-cd16-4268-b4f9-d49f038af7f3.png"
+            alt="AirTag Signature" 
+            className="relative z-10 w-[80%] max-w-[400px] animate-float"
+          />
         </div>
       </div>
     </section>
