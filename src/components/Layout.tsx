@@ -6,9 +6,22 @@ import { Button } from './ui/button';
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen bg-background">
-      <div className="bg-luxury-gold text-white py-2 animate-slideDown">
-        <div className="container mx-auto px-4 text-center text-sm font-light tracking-wider">
-          Livraison offerte dans notre écrin signature
+      <div className="relative bg-luxury-gold text-white py-2 overflow-hidden">
+        <div className="animate-[marquee_20s_linear_infinite] whitespace-nowrap inline-block">
+          <span className="mx-4">Livraison offerte dans notre écrin signature</span>
+          <span className="mx-4">•</span>
+          <span className="mx-4">Service de gravure personnalisée offert</span>
+          <span className="mx-4">•</span>
+          <span className="mx-4">Garantie à vie sur tous nos produits</span>
+          <span className="mx-4">•</span>
+          <span className="mx-4">Retours gratuits sous 30 jours</span>
+        </div>
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 animate-float">
+          <img 
+            src="/photo-1581091226825-a6a2a5aee158"
+            alt="AirTag Signature"
+            className="w-full h-full object-contain rounded-full shadow-glow"
+          />
         </div>
       </div>
       <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b">
