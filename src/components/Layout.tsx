@@ -6,7 +6,7 @@ import { Button } from './ui/button';
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen bg-background">
-      <div className="relative bg-[#F2FCE2] text-luxury-black py-2 overflow-hidden">
+      <div className="relative bg-luxury-gold text-white py-2 overflow-hidden">
         <div className="animate-[marquee_20s_linear_infinite] whitespace-nowrap inline-block">
           <span className="mx-4">Livraison offerte dans notre écrin signature</span>
           <span className="mx-4">•</span>
