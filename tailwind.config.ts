@@ -27,12 +27,12 @@ export default {
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "#9b87f5",
-          light: "#E5DEFF",
+          light: "#FFDEE2", // Rose poudré
           dark: "#7E69AB",
         },
         secondary: {
-          DEFAULT: "#403E43",
-          light: "#C8C8C9",
+          DEFAULT: "#FDE1D3", // Pêche doux
+          light: "#C8C8C9", // Gris perle
         },
         accent: {
           DEFAULT: "#D6BCFA",
