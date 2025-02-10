@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { ShoppingCart, Menu, Mail, Instagram, Twitter, Facebook, ArrowRight } from 'lucide-react';
+import { ShoppingCart, Menu, Mail, Instagram, Twitter, Facebook, ArrowRight, User } from 'lucide-react';
 import { Button } from './ui/button';
+import { Link } from 'react-router-dom';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -22,15 +23,24 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <Menu className="w-6 h-6" />
             </Button>
             <div className="hidden lg:flex items-center space-x-8">
-              <Button variant="link" className="text-black font-light tracking-wider">Collections</Button>
+              <Link to="/product">
+                <Button variant="link" className="text-black font-light tracking-wider">Collections</Button>
+              </Link>
             </div>
-            <a href="/" className="absolute left-1/2 transform -translate-x-1/2">
+            <Link to="/" className="absolute left-1/2 transform -translate-x-1/2">
               <h1 className="font-playfair text-4xl tracking-widest text-black">FINELY</h1>
-            </a>
-            <Button variant="ghost" className="text-black hover:bg-transparent hover:text-black p-0">
-              <span className="hidden lg:inline mr-2 font-light tracking-wider">Commander</span>
-              <ShoppingCart className="w-5 h-5" />
-            </Button>
+            </Link>
+            <div className="flex items-center gap-4">
+              <Link to="/profile">
+                <Button variant="ghost" className="text-black hover:bg-transparent hover:text-black p-0">
+                  <User className="w-5 h-5" />
+                </Button>
+              </Link>
+              <Button variant="ghost" className="text-black hover:bg-transparent hover:text-black p-0">
+                <span className="hidden lg:inline mr-2 font-light tracking-wider">Commander</span>
+                <ShoppingCart className="w-5 h-5" />
+              </Button>
+            </div>
           </div>
         </div>
       </nav>
