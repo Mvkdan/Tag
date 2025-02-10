@@ -16,13 +16,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <span className="mx-4">•</span>
           <span className="mx-4">Retours gratuits sous 30 jours</span>
         </div>
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 animate-float">
-          <img 
-            src="/photo-1581091226825-a6a2a5aee158"
-            alt="AirTag Signature"
-            className="w-full h-full object-contain rounded-full shadow-glow"
-          />
-        </div>
       </div>
       <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b">
         <div className="container mx-auto px-4 py-4">
@@ -32,7 +25,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <Button variant="ghost" className="text-luxury-black">Personnalisation</Button>
             </div>
             <a href="/" className="absolute left-1/2 transform -translate-x-1/2">
-              <h1 className="text-2xl font-light tracking-widest text-luxury-black">FINELY</h1>
+              <h1 className="font-playfair text-2xl tracking-widest text-luxury-black">FINELY</h1>
             </a>
             <div className="flex items-center space-x-4">
               <div className="flex items-center text-luxury-black">
@@ -54,11 +47,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h3 className="font-light text-xl mb-4">FINELY</h3>
+              <h3 className="font-playfair text-xl mb-4">FINELY</h3>
               <p className="text-gray-400">L'élégance de la sérénité au quotidien.</p>
             </div>
             <div>
-              <h4 className="font-light text-lg mb-4">Service Client</h4>
+              <h4 className="font-playfair text-lg mb-4">Service Client</h4>
               <ul className="space-y-2 text-gray-400">
                 <li>Contact</li>
                 <li>FAQ</li>
@@ -66,7 +59,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               </ul>
             </div>
             <div>
-              <h4 className="font-light text-lg mb-4">À Propos</h4>
+              <h4 className="font-playfair text-lg mb-4">À Propos</h4>
               <ul className="space-y-2 text-gray-400">
                 <li>Notre Histoire</li>
                 <li>Nos Valeurs</li>
@@ -74,7 +67,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               </ul>
             </div>
             <div>
-              <h4 className="font-light text-lg mb-4">Newsletter</h4>
+              <h4 className="font-playfair text-lg mb-4">Newsletter</h4>
               <p className="text-gray-400 mb-4">Recevez nos actualités et offres exclusives.</p>
               <div className="flex gap-2">
                 <input type="email" placeholder="Votre email" className="bg-white/10 px-4 py-2 rounded-md" />

@@ -19,6 +19,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        playfair: ['Playfair Display', 'serif'],
+        sans: ['system-ui', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -30,6 +34,7 @@ export default {
           beige: "#F5F5DC",
           cream: "#FFFDD0",
           black: "#1A1A1A",
+          white: "#FFFFFF",
         },
         primary: {
           DEFAULT: "#D4AF37",
@@ -84,6 +89,10 @@ export default {
           '0%': { transform: 'translateX(100%)' },
           '100%': { transform: 'translateX(-100%)' },
         },
+        wave: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -92,6 +101,7 @@ export default {
         fadeIn: "fadeIn 0.5s ease-out forwards",
         shimmer: "shimmer 8s linear infinite",
         slideDown: "slideDown 0.5s ease-out",
+        wave: "wave 15s linear infinite",
       },
     },
   },
