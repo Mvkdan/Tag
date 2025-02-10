@@ -1,49 +1,50 @@
 
 import React from 'react';
 import { Button } from './ui/button';
-import { Heart, Flower, Gem } from 'lucide-react';
+import { Star, Crown, Shield } from 'lucide-react';
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-r from-primary-light to-secondary-light">
-      <div className="absolute inset-0 bg-[url('/photo-1649972904349-6e44c42644a7')] opacity-10 bg-cover bg-center" />
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-r from-luxury-beige to-secondary-light">
+      <div className="absolute inset-0 bg-[url('/photo-1581091226825-a6a2a5aee158')] opacity-20 bg-cover bg-center" />
       <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center relative">
         <div className="space-y-6 animate-fadeIn">
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm text-primary rounded-full shadow-soft">
-            <Heart className="w-4 h-4" />
-            <span className="text-sm">Nouvelle Collection Féminine</span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm text-luxury-black rounded-full shadow-luxury">
+            <Crown className="w-4 h-4 text-luxury-gold" />
+            <span className="text-sm font-light tracking-wider">Collection Signature</span>
           </span>
-          <h1 className="text-4xl md:text-6xl font-bold leading-tight bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
-            La sécurité rencontre l'élégance
+          <h1 className="text-4xl md:text-6xl font-light leading-tight">
+            L'élégance de la
+            <span className="block text-luxury-gold">sérénité</span>
           </h1>
-          <p className="text-lg text-gray-600 leading-relaxed">
-            Découvrez notre AirTag exclusif, un bijou technologique qui allie style et tranquillité d'esprit. Parfait pour garder vos précieux accessoires toujours près de vous.
+          <p className="text-lg text-gray-600 leading-relaxed font-light">
+            Découvrez notre AirTag signature, un bijou technologique alliant raffinement et tranquillité d'esprit. L'accessoire indispensable de votre quotidien d'exception.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button size="lg" className="bg-primary hover:bg-primary-dark rounded-full shadow-glow transition-all duration-300">
-              Je découvre
+            <Button size="lg" className="bg-luxury-gold hover:bg-primary-dark rounded-full shadow-luxury transition-all duration-300">
+              Découvrir la Collection
             </Button>
-            <Button size="lg" variant="outline" className="rounded-full border-primary text-primary hover:bg-primary-light">
-              En savoir plus
+            <Button size="lg" variant="outline" className="rounded-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-white">
+              Service Personnalisation
             </Button>
           </div>
           <div className="flex items-center gap-6 mt-8">
-            <div className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-soft">
-              <Gem className="w-4 h-4 text-primary" />
-              <span className="text-sm">Livraison offerte</span>
+            <div className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-luxury">
+              <Star className="w-4 h-4 text-luxury-gold" />
+              <span className="text-sm">13,000+ Avis 5★</span>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-soft">
-              <Flower className="w-4 h-4 text-primary" />
-              <span className="text-sm">Garantie 1 an</span>
+            <div className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-luxury">
+              <Shield className="w-4 h-4 text-luxury-gold" />
+              <span className="text-sm">Garantie à Vie</span>
             </div>
           </div>
         </div>
         <div className="relative h-[400px] lg:h-[600px]">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-light/40 to-secondary/40 rounded-[30%] blur-3xl animate-float" />
-          <div className="relative z-10 w-full h-full rounded-[30%] overflow-hidden shadow-glow animate-float">
+          <div className="absolute inset-0 bg-gradient-to-br from-luxury-gold/20 to-secondary/20 rounded-[30%] blur-3xl animate-float" />
+          <div className="relative z-10 w-full h-full rounded-[30%] overflow-hidden shadow-luxury animate-float">
             <img 
               src="/photo-1581091226825-a6a2a5aee158" 
-              alt="AirTag élégant en situation" 
+              alt="AirTag Signature en situation" 
               className="w-full h-full object-cover"
             />
           </div>

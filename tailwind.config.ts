@@ -25,23 +25,30 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        luxury: {
+          gold: "#D4AF37",
+          beige: "#F5F5DC",
+          cream: "#FFFDD0",
+          black: "#1A1A1A",
+        },
         primary: {
-          DEFAULT: "#FF87B2",
-          light: "#FFE5ED",
-          dark: "#E85C8F",
+          DEFAULT: "#D4AF37",
+          light: "#F5E6CC",
+          dark: "#B38B28",
         },
         secondary: {
-          DEFAULT: "#FDE1D3",
-          light: "#FFF5F0",
+          DEFAULT: "#F5F5DC",
+          light: "#FFFDF5",
         },
         accent: {
-          DEFAULT: "#F1E4FF",
-          foreground: "#1A1F2C",
+          DEFAULT: "#1A1A1A",
+          foreground: "#FFFFFF",
         },
       },
       boxShadow: {
         'soft': '0 4px 20px rgba(0, 0, 0, 0.05)',
-        'glow': '0 0 30px rgba(255, 135, 178, 0.2)',
+        'glow': '0 0 30px rgba(212, 175, 55, 0.2)',
+        'luxury': '0 4px 30px rgba(212, 175, 55, 0.1)',
       },
       borderRadius: {
         'xl': '1rem',
@@ -69,6 +76,10 @@ export default {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
         },
+        slideDown: {
+          from: { transform: "translateY(-100%)" },
+          to: { transform: "translateY(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -76,6 +87,7 @@ export default {
         float: "float 6s ease-in-out infinite",
         fadeIn: "fadeIn 0.5s ease-out forwards",
         shimmer: "shimmer 8s linear infinite",
+        slideDown: "slideDown 0.5s ease-out",
       },
     },
   },
