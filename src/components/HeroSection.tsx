@@ -29,8 +29,22 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-radial from-luxury-blue via-luxury-lightBlue to-white opacity-80" />
-      <div className="absolute inset-0 bg-[url('/photo-1581091226825-a6a2a5aee158')] opacity-10 bg-cover bg-center mix-blend-overlay" />
+      {/* Fond bleu uni */}
+      <div className="absolute inset-0 bg-luxury-blue" />
+      
+      {/* Wave avec un seul creux */}
+      <div className="absolute inset-0">
+        <svg
+          className="absolute bottom-0 w-full h-48"
+          viewBox="0 0 1440 320"
+          preserveAspectRatio="none"
+          fill="white"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M0,160 C480,320 960,320 1440,160 L1440,320 L0,320 Z" />
+        </svg>
+      </div>
+
       <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center relative">
         <div className="space-y-8 animate-fadeIn">
           <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm text-luxury-black rounded-full shadow-luxury">
@@ -38,26 +52,26 @@ const HeroSection = () => {
             <span className="text-sm font-light tracking-wider">Collection Signature</span>
           </span>
           <div className="space-y-2">
-            <h1 className="font-playfair text-5xl md:text-7xl xl:text-8xl font-light leading-tight">
+            <h1 className="font-playfair text-5xl md:text-7xl xl:text-8xl font-light leading-tight text-white">
               Design
             </h1>
-            <h1 className="font-playfair text-5xl md:text-7xl xl:text-8xl font-light leading-tight">
+            <h1 className="font-playfair text-5xl md:text-7xl xl:text-8xl font-light leading-tight text-white">
               Innovation
             </h1>
-            <h1 className="font-playfair text-5xl md:text-7xl xl:text-8xl font-light leading-tight text-luxury-blue">
+            <h1 className="font-playfair text-5xl md:text-7xl xl:text-8xl font-light leading-tight text-white">
               {typedText}
-              <span className="border-r-2 border-luxury-blue ml-1 animate-blink"></span>
+              <span className="border-r-2 border-white ml-1 animate-blink"></span>
             </h1>
           </div>
-          <p className="text-lg text-gray-600 leading-relaxed font-light max-w-xl">
+          <p className="text-lg text-white/90 leading-relaxed font-light max-w-xl">
             Découvrez notre AirTag signature, un bijou technologique alliant raffinement et tranquillité d'esprit. L'accessoire indispensable de votre quotidien d'exception.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button size="lg" className="bg-luxury-blue hover:bg-primary-dark rounded-full shadow-luxury transition-all duration-300 group">
+            <Button size="lg" className="bg-white text-luxury-blue hover:bg-white/90 rounded-full shadow-luxury transition-all duration-300 group">
               Découvrir la Collection
               <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button size="lg" variant="outline" className="rounded-full border-luxury-blue text-luxury-blue hover:bg-luxury-blue hover:text-white transition-all duration-300">
+            <Button size="lg" variant="outline" className="rounded-full border-white text-white hover:bg-white hover:text-luxury-blue transition-all duration-300">
               Service Personnalisation
             </Button>
           </div>
@@ -73,7 +87,7 @@ const HeroSection = () => {
           </div>
         </div>
         <div className="relative h-[500px] lg:h-[700px]">
-          <div className="absolute inset-0 bg-gradient-to-br from-luxury-blue/20 to-secondary/20 rounded-[30%] blur-3xl animate-float" />
+          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/20 rounded-[30%] blur-3xl animate-float" />
           <div className="relative z-10 w-full h-full rounded-[30%] overflow-hidden shadow-luxury animate-float">
             <img 
               src="/photo-1581091226825-a6a2a5aee158" 
