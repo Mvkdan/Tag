@@ -14,26 +14,17 @@ import {
 
 const Collections = () => {
   const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState('');
   
-  const sizes = ['S', 'M', 'L', 'XL'];
-
   const images = [
     "/lovable-uploads/c4d34119-cd16-4268-b4f9-d49f038af7f3.png",
     "/lovable-uploads/8982a45a-388b-4280-b48c-5f2a359156f7.png"
   ];
   
   const handleAddToCart = () => {
-    if (!selectedSize) {
-      toast({
-        title: "Veuillez sélectionner une taille",
-        variant: "destructive"
-      });
-      return;
-    }
     toast({
       title: "Produit ajouté au panier",
-      description: `${quantity} x AirTag Protection - Taille ${selectedSize}`
+      description: `${quantity} x AirTag Protection`,
+      className: "bg-primary text-white",
     });
   };
 
@@ -83,26 +74,6 @@ const Collections = () => {
                   <span className="text-sm text-gray-600">(125 avis)</span>
                 </div>
                 <p className="text-3xl font-semibold text-primary">45.00 €</p>
-              </div>
-
-              {/* Size Selector */}
-              <div className="space-y-4">
-                <h3 className="font-medium">Taille</h3>
-                <div className="flex gap-3">
-                  {sizes.map((size) => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={`w-12 h-12 rounded-lg border-2 flex items-center justify-center transition-all duration-300 ${
-                        selectedSize === size 
-                          ? 'border-primary bg-primary/10 text-primary scale-105' 
-                          : 'border-gray-200 hover:border-primary/50 hover:scale-105'
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
               </div>
 
               {/* Quantity Selector */}
@@ -159,3 +130,4 @@ const Collections = () => {
 };
 
 export default Collections;
+
