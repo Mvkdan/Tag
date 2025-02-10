@@ -8,6 +8,7 @@ import Tranquility from '../components/Tranquility';
 import StyleProtection from '../components/StyleProtection';
 import WhyChoose from '../components/WhyChoose';
 import TechnicalSpecs from '../components/TechnicalSpecs';
+import TikTokReviews from '../components/TikTokReviews';
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
       <Tranquility />
       <StyleProtection />
       <WhyChoose />
+      <TikTokReviews />
       <TechnicalSpecs />
     </Layout>
   );
