@@ -3,7 +3,7 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
-import { Minus, Plus, Trash2 } from 'lucide-react';
+import { Minus, Plus, Trash2, ArrowLeft, ShoppingBag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import {
   AlertDialog,
@@ -50,14 +50,18 @@ const Cart = () => {
     return (
       <Layout>
         <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-3xl font-playfair mb-4 animate-fade-in">Votre panier est vide</h1>
-          <p className="text-gray-600 mb-8 animate-fade-in">Découvrez nos produits et commencez votre shopping</p>
-          <Button 
-            onClick={() => navigate('/product')} 
-            className="bg-primary hover:bg-primary-dark animate-fade-in"
-          >
-            Voir les produits
-          </Button>
+          <div className="max-w-md mx-auto space-y-8 animate-fade-in">
+            <ShoppingBag className="w-16 h-16 mx-auto text-gray-400" />
+            <h1 className="text-3xl font-playfair mb-4">Votre panier est vide</h1>
+            <p className="text-gray-600 mb-8">Découvrez nos produits et commencez votre shopping</p>
+            <Button 
+              onClick={() => navigate('/product')} 
+              className="bg-primary hover:bg-primary/90 transition-colors animate-fade-in"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Voir les produits
+            </Button>
+          </div>
         </div>
       </Layout>
     );
@@ -73,9 +77,13 @@ const Cart = () => {
             {items.map((item) => (
               <div 
                 key={item.id} 
-                className="flex gap-6 p-4 bg-white rounded-lg shadow-luxury animate-fade-in transition-all hover:shadow-lg"
+                className="flex gap-6 p-4 bg-white rounded-lg shadow-luxury animate-fade-in transition-all hover:shadow-lg group"
               >
-                <img src={item.image} alt={item.name} className="w-32 h-32 object-cover rounded-lg" />
+                <img 
+                  src={item.image} 
+                  alt={item.name} 
+                  className="w-32 h-32 object-cover rounded-lg transition-transform group-hover:scale-105" 
+                />
                 <div className="flex-1">
                   <div className="flex justify-between">
                     <h3 className="text-lg font-medium">{item.name}</h3>
@@ -144,8 +152,14 @@ const Cart = () => {
               </div>
               <div className="space-y-3 pt-4">
                 <Button 
-                  className="w-full hover:scale-105 transition-transform"
-                  onClick={() => navigate('/checkout')}
+                  className="w-full hover:scale-105 transition-transform bg-primary hover:bg-primary/90"
+                  onClick={() => {
+                    navigate('/checkout');
+                    toast({
+                      title: "Navigation vers le paiement",
+                      description: "Vous allez pouvoir finaliser votre commande",
+                    });
+                  }}
                 >
                   Procéder au paiement
                 </Button>
@@ -166,4 +180,3 @@ const Cart = () => {
 };
 
 export default Cart;
-
