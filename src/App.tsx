@@ -13,6 +13,8 @@ import About from "./pages/About";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Admin from "./pages/Admin";
+import AdminProducts from "./pages/AdminProducts";
+import AdminMedia from "./pages/AdminMedia";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +33,8 @@ const App = () => (
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/products" element={<AdminProducts />} />
+            <Route path="/admin/media" element={<AdminMedia />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
