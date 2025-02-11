@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { useCart } from '@/contexts/CartContext';
@@ -77,14 +76,14 @@ const Checkout = () => {
     try {
       setIsProcessing(true);
 
-      // Si l'utilisateur n'est pas connecté, on le redirige vers la page de connexion
+      // Si l'utilisateur n'est pas connecté, on le redirige vers la page d'authentification
       // avec un retour prévu vers le checkout
       if (!user) {
         toast({
           title: "Connexion requise pour finaliser la commande",
           description: "Veuillez vous connecter pour continuer",
         });
-        navigate('/profile', { state: { returnTo: '/checkout' } });
+        navigate('/auth', { state: { returnTo: '/checkout' } });
         return;
       }
 

@@ -4,8 +4,36 @@ import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { User, Package, Heart, Settings, LogOut } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { toast } from '@/hooks/use-toast';
 
 const Profile = () => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Déconnexion réussie",
+        description: "À bientôt !",
+      });
+      navigate('/');
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de la déconnexion",
+        variant: "destructive",
+      });
+    }
+  };
+
+  if (!user) {
+    navigate('/auth');
+    return null;
+  }
+
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
@@ -18,8 +46,7 @@ const Profile = () => {
                 <User className="w-10 h-10 text-primary" />
               </div>
               <div>
-                <h2 className="text-2xl font-medium">Jean Dupont</h2>
-                <p className="text-gray-600">jean.dupont@example.com</p>
+                <h2 className="text-2xl font-medium">{user.email}</h2>
               </div>
             </div>
           </div>
@@ -33,7 +60,7 @@ const Profile = () => {
                 <h3 className="text-xl font-medium">Mes Commandes</h3>
               </div>
               <p className="text-gray-600 mb-4">Consultez l'historique de vos commandes</p>
-              <Button className="w-full">Voir mes commandes</Button>
+              <Button onClick={() => navigate('/orders')} className="w-full">Voir mes commandes</Button>
             </Card>
 
             {/* Favorites Section */}
@@ -63,7 +90,11 @@ const Profile = () => {
                 <h3 className="text-xl font-medium">Déconnexion</h3>
               </div>
               <p className="text-gray-600 mb-4">Se déconnecter de votre compte</p>
-              <Button variant="outline" className="w-full text-red-600 hover:text-red-700">
+              <Button 
+                variant="outline" 
+                className="w-full text-red-600 hover:text-red-700"
+                onClick={handleSignOut}
+              >
                 Se déconnecter
               </Button>
             </Card>
