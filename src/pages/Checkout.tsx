@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import { useCart } from '@/contexts/CartContext';
 import { useForm } from 'react-hook-form';
@@ -13,6 +13,11 @@ import PromoCodeSection from '@/components/checkout/PromoCodeSection';
 import OrderSummary from '@/components/checkout/OrderSummary';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
+import { loadStripe } from '@stripe/stripe-js';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+
+const stripePromise = loadStripe('pk_test_your_publishable_key');
 
 const formSchema = z.object({
   firstName: z.string().min(2, "Le prénom doit contenir au moins 2 caractères"),
@@ -42,6 +47,8 @@ const Checkout = () => {
     finalTotal
   } = useCart();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const form = useForm<CheckoutFormData>({
     resolver: zodResolver(formSchema),
@@ -57,7 +64,18 @@ const Checkout = () => {
     },
   });
 
-  const onSubmit = (data: CheckoutFormData) => {
+  useEffect(() => {
+    if (!user) {
+      toast({
+        title: "Connexion requise",
+        description: "Veuillez vous connecter pour continuer",
+        variant: "destructive",
+      });
+      navigate('/profile');
+    }
+  }, [user, navigate]);
+
+  const onSubmit = async (data: CheckoutFormData) => {
     if (!shippingMethod) {
       toast({
         title: "Mode de livraison requis",
@@ -67,13 +85,78 @@ const Checkout = () => {
       return;
     }
 
-    toast({
-      title: "Commande confirmée",
-      description: "Merci pour votre achat !",
-      className: "bg-primary text-white",
-    });
-    clearCart();
-    navigate('/');
+    if (!user) {
+      toast({
+        title: "Connexion requise",
+        description: "Veuillez vous connecter pour continuer",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+
+      const orderData = {
+        ...data,
+        shipping_method: shippingMethod,
+        shipping_cost: shippingCost,
+        total: finalTotal,
+        discount: discount,
+        promo_code: promoCode,
+        items: items.map(item => ({
+          product_id: item.id,
+          quantity: item.quantity,
+          price: item.price,
+          name: item.name,
+          image: item.image
+        })),
+        user_id: user.id
+      };
+
+      const response = await fetch('/api/create-payment-intent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
+        },
+        body: JSON.stringify({
+          amount: finalTotal,
+          order_data: orderData,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const { clientSecret, orderId } = await response.json();
+
+      const stripe = await stripePromise;
+      if (!stripe) throw new Error('Stripe failed to load');
+
+      const { error } = await stripe.confirmPayment({
+        elements: null,
+        clientSecret,
+        confirmParams: {
+          return_url: `${window.location.origin}/orders/${orderId}`,
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+    } catch (error) {
+      console.error('Payment error:', error);
+      toast({
+        title: "Erreur de paiement",
+        description: "Une erreur est survenue lors du paiement. Veuillez réessayer.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handlePromoCodeSubmit = (e: React.FormEvent) => {
@@ -130,6 +213,15 @@ const Checkout = () => {
                 shippingCost={shippingCost}
                 finalTotal={finalTotal}
               />
+
+              <Button 
+                type="submit" 
+                className="w-full" 
+                disabled={isProcessing}
+                onClick={form.handleSubmit(onSubmit)}
+              >
+                {isProcessing ? 'Traitement en cours...' : 'Payer'}
+              </Button>
             </div>
           </div>
         </Form>
@@ -139,4 +231,3 @@ const Checkout = () => {
 };
 
 export default Checkout;
-
