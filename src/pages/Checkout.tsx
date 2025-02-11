@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { useCart } from '@/contexts/CartContext';
 import { useForm } from 'react-hook-form';
@@ -64,17 +64,6 @@ const Checkout = () => {
     },
   });
 
-  useEffect(() => {
-    if (!user) {
-      toast({
-        title: "Connexion requise",
-        description: "Veuillez vous connecter pour continuer",
-        variant: "destructive",
-      });
-      navigate('/profile');
-    }
-  }, [user, navigate]);
-
   const onSubmit = async (data: CheckoutFormData) => {
     if (!shippingMethod) {
       toast({
@@ -85,17 +74,19 @@ const Checkout = () => {
       return;
     }
 
-    if (!user) {
-      toast({
-        title: "Connexion requise",
-        description: "Veuillez vous connecter pour continuer",
-        variant: "destructive",
-      });
-      return;
-    }
-
     try {
       setIsProcessing(true);
+
+      // Si l'utilisateur n'est pas connecté, on le redirige vers la page de connexion
+      // avec un retour prévu vers le checkout
+      if (!user) {
+        toast({
+          title: "Connexion requise pour finaliser la commande",
+          description: "Veuillez vous connecter pour continuer",
+        });
+        navigate('/profile', { state: { returnTo: '/checkout' } });
+        return;
+      }
 
       const orderData = {
         ...data,
