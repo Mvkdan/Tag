@@ -1,7 +1,8 @@
 import React from 'react';
-import { ShoppingCart, Menu, Mail, Instagram, Twitter, Facebook, ArrowRight, User } from 'lucide-react';
+import { Menu, Mail, Instagram, Twitter, Facebook, ArrowRight, User } from 'lucide-react';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
+import MiniCart from './MiniCart';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -39,10 +40,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                     <User className="w-5 h-5" />
                   </Button>
                 </Link>
-                <Button variant="ghost" className="text-black hover:bg-transparent hover:text-black p-0">
-                  <span className="hidden lg:inline mr-2 font-light tracking-wider text-black">Commander</span>
-                  <ShoppingCart className="w-5 h-5" />
-                </Button>
+                <MiniCart />
               </div>
             </div>
           </div>
