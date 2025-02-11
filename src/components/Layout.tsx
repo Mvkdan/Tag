@@ -16,7 +16,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <span className="mx-4">Subscribe & Save 10%</span>
         </div>
       </div>
-      <div className="fixed w-full z-50 px-4 pt-4">
+      <div className="fixed w-full z-50 px-4">
         <nav className="container mx-auto bg-white rounded-xl shadow-luxury">
           <div className="px-6 py-4">
             <div className="flex justify-between items-center">
@@ -38,7 +38,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   </Button>
                 </Link>
                 <Button variant="ghost" className="text-black hover:bg-transparent hover:text-black p-0">
-                  <span className="hidden lg:inline mr-2 font-light tracking-wider">Commander</span>
+                  <span className="hidden lg:inline mr-2 font-light tracking-wider text-black">Commander</span>
                   <ShoppingCart className="w-5 h-5" />
                 </Button>
               </div>
@@ -46,7 +46,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </div>
         </nav>
       </div>
-      <main className="pt-28">
+      <main className="pt-24">
         {children}
       </main>
       
