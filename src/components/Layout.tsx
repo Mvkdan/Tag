@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ShoppingCart, Menu, Mail, Instagram, Twitter, Facebook, ArrowRight, User } from 'lucide-react';
 import { Button } from './ui/button';
@@ -27,6 +26,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 <Link to="/product">
                   <Button variant="link" className="text-black font-light tracking-wider">Collections</Button>
                 </Link>
+                <Link to="/about">
+                  <Button variant="link" className="text-black font-light tracking-wider">À Propos</Button>
+                </Link>
               </div>
               <Link to="/" className="absolute left-1/2 transform -translate-x-1/2">
                 <h1 className="font-playfair text-4xl tracking-widest text-black">FINELY</h1>
@@ -50,9 +52,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         {children}
       </main>
       
-      {/* New Footer */}
+      {/* Footer */}
       <footer>
-        {/* CTA Banner */}
         <div className="bg-[#40BCD8] text-white py-16">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center justify-between">
@@ -70,7 +71,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </div>
         </div>
 
-        {/* Main Footer */}
         <div className="bg-luxury-black text-white py-16">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
