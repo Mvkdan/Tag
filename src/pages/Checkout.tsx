@@ -26,17 +26,21 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-interface CheckoutFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  address: string;
-  city: string;
-  postalCode: string;
-  phone: string;
-  promoCode: string;
-}
+const formSchema = z.object({
+  firstName: z.string().min(2, "Le prénom doit contenir au moins 2 caractères"),
+  lastName: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
+  email: z.string().email("Email invalide"),
+  address: z.string().min(5, "L'adresse doit contenir au moins 5 caractères"),
+  city: z.string().min(2, "La ville doit contenir au moins 2 caractères"),
+  postalCode: z.string().min(5, "Code postal invalide"),
+  phone: z.string().min(10, "Numéro de téléphone invalide"),
+  promoCode: z.string().optional(),
+});
+
+type CheckoutFormData = z.infer<typeof formSchema>;
 
 const Checkout = () => {
   const { 
@@ -55,6 +59,7 @@ const Checkout = () => {
   const navigate = useNavigate();
 
   const form = useForm<CheckoutFormData>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -77,7 +82,6 @@ const Checkout = () => {
       return;
     }
 
-    // Simuler un traitement de commande
     toast({
       title: "Commande confirmée",
       description: "Merci pour votre achat !",
@@ -224,6 +228,12 @@ const Checkout = () => {
                         )}
                       />
                     </div>
+                    <Button 
+                      type="submit"
+                      className="w-full mt-8 hover:scale-105 transition-transform bg-primary hover:bg-primary/90"
+                    >
+                      Confirmer la commande
+                    </Button>
                   </form>
                 </Form>
               </CardContent>
@@ -374,13 +384,6 @@ const Checkout = () => {
                     <span>{finalTotal.toFixed(2)} €</span>
                   </div>
                 </div>
-
-                <Button 
-                  onClick={form.handleSubmit(onSubmit)} 
-                  className="w-full mt-8 hover:scale-105 transition-transform bg-primary hover:bg-primary/90"
-                >
-                  Confirmer la commande
-                </Button>
               </CardContent>
             </Card>
           </div>
