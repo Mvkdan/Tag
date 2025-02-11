@@ -11,6 +11,7 @@ import ShippingForm from '@/components/checkout/ShippingForm';
 import ShippingMethod from '@/components/checkout/ShippingMethod';
 import PromoCodeSection from '@/components/checkout/PromoCodeSection';
 import OrderSummary from '@/components/checkout/OrderSummary';
+import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 
 const formSchema = z.object({
@@ -103,36 +104,39 @@ const Checkout = () => {
       <div className="container mx-auto px-4 py-16">
         <h1 className="text-3xl font-playfair mb-8 animate-fade-in">Finaliser votre commande</h1>
         
-        <div className="grid lg:grid-cols-2 gap-12">
-          <div className="space-y-8">
-            <ShippingForm form={form} onSubmit={onSubmit} />
-            <ShippingMethod 
-              shippingMethod={shippingMethod} 
-              onShippingMethodChange={setShippingMethod} 
-            />
-          </div>
+        <Form {...form}>
+          <div className="grid lg:grid-cols-2 gap-12">
+            <div className="space-y-8">
+              <ShippingForm form={form} onSubmit={onSubmit} />
+              <ShippingMethod 
+                shippingMethod={shippingMethod} 
+                onShippingMethodChange={setShippingMethod} 
+              />
+            </div>
 
-          <div className="space-y-8">
-            <PromoCodeSection 
-              form={form}
-              promoCode={promoCode}
-              onPromoCodeSubmit={handlePromoCodeSubmit}
-              onRemovePromoCode={removePromoCode}
-            />
+            <div className="space-y-8">
+              <PromoCodeSection 
+                form={form}
+                promoCode={promoCode}
+                onPromoCodeSubmit={handlePromoCodeSubmit}
+                onRemovePromoCode={removePromoCode}
+              />
 
-            <OrderSummary 
-              items={items}
-              total={total}
-              discount={discount}
-              shippingMethod={shippingMethod}
-              shippingCost={shippingCost}
-              finalTotal={finalTotal}
-            />
+              <OrderSummary 
+                items={items}
+                total={total}
+                discount={discount}
+                shippingMethod={shippingMethod}
+                shippingCost={shippingCost}
+                finalTotal={finalTotal}
+              />
+            </div>
           </div>
-        </div>
+        </Form>
       </div>
     </Layout>
   );
 };
 
 export default Checkout;
+
