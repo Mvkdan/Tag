@@ -18,21 +18,40 @@ interface CartContextType {
   clearCart: () => void;
   total: number;
   itemCount: number;
+  promoCode: string | null;
+  applyPromoCode: (code: string) => void;
+  removePromoCode: () => void;
+  discount: number;
+  shippingMethod: 'standard' | 'express' | null;
+  setShippingMethod: (method: 'standard' | 'express' | null) => void;
+  shippingCost: number;
+  finalTotal: number;
 }
 
 const CART_STORAGE_KEY = 'finely_cart';
+const VALID_PROMO_CODES = {
+  'BIENVENUE10': 0.10,
+  'FINELY20': 0.20,
+  'ETE2024': 0.15
+};
+
+const SHIPPING_COSTS = {
+  standard: 4.99,
+  express: 9.99
+};
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  // Initialize state from localStorage if available
   const [items, setItems] = useState<CartItem[]>(() => {
     if (typeof window === 'undefined') return [];
     const savedCart = localStorage.getItem(CART_STORAGE_KEY);
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
-  // Save to localStorage whenever cart changes
+  const [promoCode, setPromoCode] = useState<string | null>(null);
+  const [shippingMethod, setShippingMethod] = useState<'standard' | 'express' | null>(null);
+
   useEffect(() => {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
   }, [items]);
@@ -76,7 +95,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         if (item.id === itemId) {
           const newQuantity = Math.max(0, quantity);
           if (newQuantity === 0) {
-            // If quantity becomes 0, we'll remove the item
             removeItem(itemId);
             return item;
           }
@@ -89,13 +107,44 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearCart = () => {
     setItems([]);
+    setPromoCode(null);
+    setShippingMethod(null);
     toast({
       title: "Panier vidé",
       description: "Votre panier a été vidé avec succès",
     });
   };
 
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const applyPromoCode = (code: string) => {
+    const upperCode = code.toUpperCase();
+    if (VALID_PROMO_CODES[upperCode as keyof typeof VALID_PROMO_CODES]) {
+      setPromoCode(upperCode);
+      toast({
+        title: "Code promo appliqué",
+        description: `Le code ${upperCode} a été appliqué avec succès`,
+      });
+    } else {
+      toast({
+        title: "Code promo invalide",
+        description: "Ce code promo n'est pas valide",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const removePromoCode = () => {
+    setPromoCode(null);
+    toast({
+      title: "Code promo retiré",
+      description: "Le code promo a été retiré",
+    });
+  };
+
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const discount = promoCode ? subtotal * VALID_PROMO_CODES[promoCode as keyof typeof VALID_PROMO_CODES] : 0;
+  const shippingCost = shippingMethod ? SHIPPING_COSTS[shippingMethod] : 0;
+  const total = subtotal - discount;
+  const finalTotal = total + shippingCost;
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
@@ -108,6 +157,14 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         clearCart,
         total,
         itemCount,
+        promoCode,
+        applyPromoCode,
+        removePromoCode,
+        discount,
+        shippingMethod,
+        setShippingMethod,
+        shippingCost,
+        finalTotal,
       }}
     >
       {children}
