@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Heart, Minus, Plus, Star, ChevronLeft, ChevronRight } from 'lucide-react';
-import { toast } from './ui/use-toast';
+import { useCart } from '@/contexts/CartContext';
 import {
   Carousel,
   CarouselContent,
@@ -14,17 +14,27 @@ import {
 
 const Collections = () => {
   const [quantity, setQuantity] = useState(1);
+  const { addItem } = useCart();
   
   const images = [
     "/lovable-uploads/c4d34119-cd16-4268-b4f9-d49f038af7f3.png",
     "/lovable-uploads/8982a45a-388b-4280-b48c-5f2a359156f7.png"
   ];
+
+  const productData = {
+    id: "airtag-protection-1",
+    name: "AirTag Protection Premium",
+    price: 45.00,
+    image: images[0]
+  };
   
   const handleAddToCart = () => {
-    toast({
-      title: "Produit ajouté au panier",
-      description: `${quantity} x AirTag Protection`,
-      className: "bg-primary text-white",
+    addItem({
+      id: productData.id,
+      name: productData.name,
+      price: productData.price,
+      quantity: quantity,
+      image: productData.image
     });
   };
 
@@ -63,7 +73,7 @@ const Collections = () => {
             <div className="space-y-6">
               <div className="space-y-2">
                 <h2 className="text-3xl font-playfair mb-2 bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
-                  AirTag Protection Premium
+                  {productData.name}
                 </h2>
                 <div className="flex items-center gap-2 mb-4">
                   <div className="flex">
@@ -73,7 +83,7 @@ const Collections = () => {
                   </div>
                   <span className="text-sm text-gray-600">(125 avis)</span>
                 </div>
-                <p className="text-3xl font-semibold text-primary">45.00 €</p>
+                <p className="text-3xl font-semibold text-primary">{productData.price.toFixed(2)} €</p>
               </div>
 
               {/* Quantity Selector */}
