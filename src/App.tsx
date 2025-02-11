@@ -21,37 +21,44 @@ import AdminArticles from "./pages/AdminArticles";
 import AdminSettings from "./pages/AdminSettings";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import { AuthProvider } from "./contexts/AuthContext";
+import Orders from "./pages/Orders";
+import OrderDetails from "./pages/OrderDetails";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <CartProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/product" element={<Product />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:id" element={<BlogPost />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/admin/products" element={<AdminProducts />} />
-            <Route path="/admin/media" element={<AdminMedia />} />
-            <Route path="/admin/users" element={<AdminUsers />} />
-            <Route path="/admin/testimonials" element={<AdminTestimonials />} />
-            <Route path="/admin/articles" element={<AdminArticles />} />
-            <Route path="/admin/settings" element={<AdminSettings />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/product" element={<Product />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:id" element={<BlogPost />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/admin/products" element={<AdminProducts />} />
+              <Route path="/admin/media" element={<AdminMedia />} />
+              <Route path="/admin/users" element={<AdminUsers />} />
+              <Route path="/admin/testimonials" element={<AdminTestimonials />} />
+              <Route path="/admin/articles" element={<AdminArticles />} />
+              <Route path="/admin/settings" element={<AdminSettings />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/orders/:id" element={<OrderDetails />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </CartProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

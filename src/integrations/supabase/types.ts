@@ -9,7 +9,104 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      order_items: {
+        Row: {
+          id: string
+          image: string
+          name: string
+          order_id: string
+          price: number
+          product_id: string
+          quantity: number
+        }
+        Insert: {
+          id?: string
+          image: string
+          name: string
+          order_id: string
+          price: number
+          product_id: string
+          quantity: number
+        }
+        Update: {
+          id?: string
+          image?: string
+          name?: string
+          order_id?: string
+          price?: number
+          product_id?: string
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          address: string
+          city: string
+          created_at: string
+          discount: number | null
+          email: string
+          first_name: string
+          id: string
+          last_name: string
+          phone: string
+          postal_code: string
+          promo_code: string | null
+          shipping_cost: number
+          shipping_method: string
+          status: string
+          stripe_payment_intent_id: string | null
+          total: number
+          user_id: string | null
+        }
+        Insert: {
+          address: string
+          city: string
+          created_at?: string
+          discount?: number | null
+          email: string
+          first_name: string
+          id?: string
+          last_name: string
+          phone: string
+          postal_code: string
+          promo_code?: string | null
+          shipping_cost: number
+          shipping_method: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+          total: number
+          user_id?: string | null
+        }
+        Update: {
+          address?: string
+          city?: string
+          created_at?: string
+          discount?: number | null
+          email?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          phone?: string
+          postal_code?: string
+          promo_code?: string | null
+          shipping_cost?: number
+          shipping_method?: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+          total?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
