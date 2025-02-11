@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { useCart } from '@/contexts/CartContext';
@@ -10,13 +11,11 @@ import ShippingForm from '@/components/checkout/ShippingForm';
 import ShippingMethod from '@/components/checkout/ShippingMethod';
 import PromoCodeSection from '@/components/checkout/PromoCodeSection';
 import OrderSummary from '@/components/checkout/OrderSummary';
+import StripeWrapper from '@/components/checkout/StripeWrapper';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { loadStripe } from '@stripe/stripe-js';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-
-const stripePromise = loadStripe('pk_test_your_publishable_key');
 
 const formSchema = z.object({
   firstName: z.string().min(2, "Le prénom doit contenir au moins 2 caractères"),
@@ -48,6 +47,9 @@ const Checkout = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string>("");
+  const [orderId, setOrderId] = useState<string>("");
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
 
   const form = useForm<CheckoutFormData>({
     resolver: zodResolver(formSchema),
@@ -76,8 +78,6 @@ const Checkout = () => {
     try {
       setIsProcessing(true);
 
-      // Si l'utilisateur n'est pas connecté, on le redirige vers la page d'authentification
-      // avec un retour prévu vers le checkout
       if (!user) {
         toast({
           title: "Connexion requise pour finaliser la commande",
@@ -120,22 +120,10 @@ const Checkout = () => {
         throw new Error('Network response was not ok');
       }
 
-      const { clientSecret, orderId } = await response.json();
-
-      const stripe = await stripePromise;
-      if (!stripe) throw new Error('Stripe failed to load');
-
-      const { error } = await stripe.confirmPayment({
-        elements: null,
-        clientSecret,
-        confirmParams: {
-          return_url: `${window.location.origin}/orders/${orderId}`,
-        },
-      });
-
-      if (error) {
-        throw error;
-      }
+      const { clientSecret: secret, orderId: id } = await response.json();
+      setClientSecret(secret);
+      setOrderId(id);
+      setShowPaymentForm(true);
 
     } catch (error) {
       console.error('Payment error:', error);
@@ -177,44 +165,50 @@ const Checkout = () => {
       <div className="container mx-auto px-4 py-16">
         <h1 className="text-3xl font-playfair mb-8 animate-fade-in">Finaliser votre commande</h1>
         
-        <Form {...form}>
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div className="space-y-8">
-              <ShippingForm form={form} onSubmit={onSubmit} />
-              <ShippingMethod 
-                shippingMethod={shippingMethod} 
-                onShippingMethodChange={setShippingMethod} 
-              />
+        {!showPaymentForm ? (
+          <Form {...form}>
+            <div className="grid lg:grid-cols-2 gap-12">
+              <div className="space-y-8">
+                <ShippingForm form={form} onSubmit={onSubmit} />
+                <ShippingMethod 
+                  shippingMethod={shippingMethod} 
+                  onShippingMethodChange={setShippingMethod} 
+                />
+              </div>
+
+              <div className="space-y-8">
+                <PromoCodeSection 
+                  form={form}
+                  promoCode={promoCode}
+                  onPromoCodeSubmit={handlePromoCodeSubmit}
+                  onRemovePromoCode={removePromoCode}
+                />
+
+                <OrderSummary 
+                  items={items}
+                  total={total}
+                  discount={discount}
+                  shippingMethod={shippingMethod}
+                  shippingCost={shippingCost}
+                  finalTotal={finalTotal}
+                />
+
+                <Button 
+                  type="submit" 
+                  className="w-full" 
+                  disabled={isProcessing}
+                  onClick={form.handleSubmit(onSubmit)}
+                >
+                  {isProcessing ? 'Traitement en cours...' : 'Procéder au paiement'}
+                </Button>
+              </div>
             </div>
-
-            <div className="space-y-8">
-              <PromoCodeSection 
-                form={form}
-                promoCode={promoCode}
-                onPromoCodeSubmit={handlePromoCodeSubmit}
-                onRemovePromoCode={removePromoCode}
-              />
-
-              <OrderSummary 
-                items={items}
-                total={total}
-                discount={discount}
-                shippingMethod={shippingMethod}
-                shippingCost={shippingCost}
-                finalTotal={finalTotal}
-              />
-
-              <Button 
-                type="submit" 
-                className="w-full" 
-                disabled={isProcessing}
-                onClick={form.handleSubmit(onSubmit)}
-              >
-                {isProcessing ? 'Traitement en cours...' : 'Payer'}
-              </Button>
-            </div>
+          </Form>
+        ) : (
+          <div className="max-w-md mx-auto">
+            <StripeWrapper clientSecret={clientSecret} orderId={orderId} />
           </div>
-        </Form>
+        )}
       </div>
     </Layout>
   );
