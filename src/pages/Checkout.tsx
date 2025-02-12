@@ -45,7 +45,7 @@ const Checkout = () => {
   } = useCart();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [clientSecret, setClientSecret] = useState<string>("");
+  const [sessionUrl, setSessionUrl] = useState<string>("");
   const [orderId, setOrderId] = useState<string>("");
   const [showPaymentForm, setShowPaymentForm] = useState(false);
 
@@ -110,8 +110,8 @@ const Checkout = () => {
         throw error;
       }
 
-      const { clientSecret: secret, orderId: id } = response;
-      setClientSecret(secret);
+      const { sessionUrl: url, orderId: id } = response;
+      setSessionUrl(url);
       setOrderId(id);
       setShowPaymentForm(true);
 
@@ -196,7 +196,7 @@ const Checkout = () => {
           </Form>
         ) : (
           <div className="max-w-md mx-auto">
-            <StripeWrapper clientSecret={clientSecret} orderId={orderId} />
+            <StripeWrapper sessionUrl={sessionUrl} orderId={orderId} />
           </div>
         )}
       </div>

@@ -37,25 +37,15 @@ serve(async (req) => {
     // Get request body
     const { amount, order_data } = await req.json()
 
-    // Create a PaymentIntent with the order amount and currency
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Stripe expects amounts in cents
-      currency: 'eur',
-      automatic_payment_methods: {
-        enabled: true,
-      },
-    })
-
     // Séparer les items du reste des données de la commande
     const { items, ...orderDataWithoutItems } = order_data;
 
-    // Create the order in pending state with PaymentIntent ID
+    // Create the order in pending state
     const { data: order, error: orderError } = await supabaseClient
       .from('orders')
       .insert([
         {
           ...orderDataWithoutItems,
-          stripe_payment_intent_id: paymentIntent.id,
           status: 'pending',
         },
       ])
@@ -82,10 +72,40 @@ serve(async (req) => {
       if (itemsError) throw itemsError
     }
 
-    // Return the client secret and order ID
+    // Create a Stripe Checkout Session
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: items.map((item: any) => ({
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: item.name,
+            images: [item.image],
+          },
+          unit_amount: Math.round(item.price * 100), // Stripe expects amounts in cents
+        },
+        quantity: item.quantity,
+      })),
+      mode: 'payment',
+      success_url: `${req.headers.get('origin')}/orders/${order.id}?success=true`,
+      cancel_url: `${req.headers.get('origin')}/checkout?canceled=true`,
+      metadata: {
+        order_id: order.id,
+      },
+    })
+
+    // Update order with Stripe session ID
+    const { error: updateError } = await supabaseClient
+      .from('orders')
+      .update({ stripe_session_id: session.id })
+      .eq('id', order.id)
+
+    if (updateError) throw updateError
+
+    // Return the session URL
     return new Response(
       JSON.stringify({
-        clientSecret: paymentIntent.client_secret,
+        sessionUrl: session.url,
         orderId: order.id,
       }),
       {
