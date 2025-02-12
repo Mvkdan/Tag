@@ -182,6 +182,39 @@ export type Database = {
         }
         Relationships: []
       }
+      stripe_webhook_events: {
+        Row: {
+          error_message: string | null
+          id: string
+          payload: Json
+          processed_at: string | null
+          received_at: string
+          status: string
+          stripe_event_id: string
+          type: string
+        }
+        Insert: {
+          error_message?: string | null
+          id?: string
+          payload: Json
+          processed_at?: string | null
+          received_at?: string
+          status?: string
+          stripe_event_id: string
+          type: string
+        }
+        Update: {
+          error_message?: string | null
+          id?: string
+          payload?: Json
+          processed_at?: string | null
+          received_at?: string
+          status?: string
+          stripe_event_id?: string
+          type?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
