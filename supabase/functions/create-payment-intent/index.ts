@@ -37,15 +37,25 @@ serve(async (req) => {
     // Get request body
     const { amount, order_data } = await req.json()
 
-    // Créer une copie des données de la commande sans les items
+    // Create a PaymentIntent with the order amount and currency
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(amount * 100), // Stripe expects amounts in cents
+      currency: 'eur',
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    })
+
+    // Séparer les items du reste des données de la commande
     const { items, ...orderDataWithoutItems } = order_data;
 
-    // Create the order in pending state
+    // Create the order in pending state with PaymentIntent ID
     const { data: order, error: orderError } = await supabaseClient
       .from('orders')
       .insert([
         {
           ...orderDataWithoutItems,
+          stripe_payment_intent_id: paymentIntent.id,
           status: 'pending',
         },
       ])
@@ -71,23 +81,6 @@ serve(async (req) => {
 
       if (itemsError) throw itemsError
     }
-
-    // Create a PaymentIntent with the order amount and currency
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Stripe expects amounts in cents
-      currency: 'eur',
-      automatic_payment_methods: {
-        enabled: true,
-      },
-    })
-
-    // Update order with Stripe payment intent ID
-    const { error: updateError } = await supabaseClient
-      .from('orders')
-      .update({ stripe_payment_intent_id: paymentIntent.id })
-      .eq('id', order.id)
-
-    if (updateError) throw updateError
 
     // Return the client secret and order ID
     return new Response(
