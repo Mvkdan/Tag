@@ -33,12 +33,18 @@ const PaymentForm = ({ clientSecret, orderId }: PaymentFormProps) => {
   }, [isProcessing]);
 
   const updateOrderStatus = async (status: string, errorMsg?: string) => {
+    const newTimelineEvent = {
+      status,
+      timestamp: new Date().toISOString(),
+      message: errorMsg
+    };
+
     const { error } = await supabase
       .from('orders')
       .update({ 
         status,
         error_message: errorMsg,
-        status_timeline: supabase.sql`array_append(COALESCE(status_timeline, ARRAY[]::jsonb[]), jsonb_build_object('status', ${status}, 'timestamp', now(), 'message', ${errorMsg}))`,
+        status_timeline: status_timeline => [...(status_timeline || []), newTimelineEvent]
       })
       .eq('id', orderId);
 
