@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { useCart } from '@/contexts/CartContext';
@@ -92,22 +91,18 @@ const Checkout = () => {
         }))
       };
 
-      const response = await fetch('/api/create-payment-intent', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data: response, error } = await supabase.functions.invoke('create-payment-intent', {
+        body: {
           amount: finalTotal,
           order_data: orderData,
-        }),
+        },
       });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+      if (error) {
+        throw error;
       }
 
-      const { clientSecret: secret, orderId: id } = await response.json();
+      const { clientSecret: secret, orderId: id } = response;
       setClientSecret(secret);
       setOrderId(id);
       setShowPaymentForm(true);
