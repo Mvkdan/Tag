@@ -31,32 +31,27 @@ serve(async (req) => {
       }
     )
 
-    const { name, description, price, image } = await req.json()
+    const { stripe_price_id } = await req.json()
 
-    // Create product in Stripe
-    const stripeProduct = await stripe.products.create({
-      name,
-      description,
-      images: [image],
+    // Fetch price details from Stripe
+    const price = await stripe.prices.retrieve(stripe_price_id, {
+      expand: ['product']
     })
 
-    // Create price in Stripe
-    const stripePrice = await stripe.prices.create({
-      product: stripeProduct.id,
-      unit_amount: Math.round(price * 100), // Convert to cents
-      currency: 'eur',
-    })
+    if (!price.product || typeof price.product === 'string') {
+      throw new Error('Invalid price data from Stripe')
+    }
 
     // Store product in database
     const { data: product, error } = await supabaseClient
       .from('products')
       .insert({
-        name,
-        description,
-        price,
-        image,
-        stripe_product_id: stripeProduct.id,
-        stripe_price_id: stripePrice.id,
+        name: price.product.name,
+        description: price.product.description,
+        price: price.unit_amount ? price.unit_amount / 100 : 0, // Convert from cents to euros
+        image: price.product.images?.[0] || '',
+        stripe_product_id: price.product.id,
+        stripe_price_id: price.id,
       })
       .select()
       .single()

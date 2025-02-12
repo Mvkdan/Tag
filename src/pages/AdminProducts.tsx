@@ -12,38 +12,62 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarTrigger,
-} from "@/components/ui/menubar";
-import { Package, Plus, Search, Filter } from 'lucide-react';
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from '@/components/ui/input';
-
-const products = [
-  {
-    id: 1,
-    name: 'AirTag Protection Premium',
-    price: '45,00 €',
-    stock: 25,
-    status: 'En stock',
-    image: '/lovable-uploads/c4d34119-cd16-4268-b4f9-d49f038af7f3.png'
-  },
-  {
-    id: 2,
-    name: 'AirTag Protection Classic',
-    price: '35,00 €',
-    stock: 15,
-    status: 'En stock',
-    image: '/lovable-uploads/8982a45a-388b-4280-b48c-5f2a359156f7.png'
-  }
-];
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Package, Plus, Search, Filter } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 const AdminProducts = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [stripePriceId, setStripePriceId] = useState('');
+  const [isImporting, setIsImporting] = useState(false);
+
+  const { data: products, refetch } = useQuery({
+    queryKey: ['products'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const handleImportProduct = async () => {
+    try {
+      setIsImporting(true);
+      const { data, error } = await supabase.functions.invoke('manage-product', {
+        body: { stripe_price_id: stripePriceId },
+      });
+
+      if (error) throw error;
+
+      await refetch();
+      toast({
+        title: "Produit importé avec succès",
+        description: "Le produit a été ajouté à votre catalogue",
+      });
+      setStripePriceId('');
+    } catch (error) {
+      console.error('Error importing product:', error);
+      toast({
+        title: "Erreur lors de l'importation",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsImporting(false);
+    }
+  };
 
   return (
     <AdminLayout>
@@ -53,10 +77,42 @@ const AdminProducts = () => {
             <h1 className="text-3xl font-bold">Produits</h1>
             <p className="text-gray-500 mt-2">Gérez vos produits et leur inventaire</p>
           </div>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Ajouter un produit
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                Importer un produit Stripe
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Importer un produit depuis Stripe</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <label htmlFor="priceId" className="text-sm font-medium">
+                    ID du prix Stripe
+                  </label>
+                  <Input
+                    id="priceId"
+                    placeholder="price_..."
+                    value={stripePriceId}
+                    onChange={(e) => setStripePriceId(e.target.value)}
+                  />
+                  <p className="text-sm text-gray-500">
+                    Entrez l'ID du prix Stripe que vous souhaitez importer
+                  </p>
+                </div>
+                <Button 
+                  className="w-full" 
+                  onClick={handleImportProduct}
+                  disabled={isImporting || !stripePriceId}
+                >
+                  {isImporting ? 'Importation...' : 'Importer le produit'}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
 
         <Card className="p-6">
@@ -82,13 +138,12 @@ const AdminProducts = () => {
                 <TableHead>Image</TableHead>
                 <TableHead>Nom</TableHead>
                 <TableHead>Prix</TableHead>
-                <TableHead>Stock</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead>ID Stripe</TableHead>
+                <TableHead>Statut</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {products.map((product) => (
+              {products?.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell>
                     <img 
@@ -98,28 +153,22 @@ const AdminProducts = () => {
                     />
                   </TableCell>
                   <TableCell className="font-medium">{product.name}</TableCell>
-                  <TableCell>{product.price}</TableCell>
-                  <TableCell>{product.stock}</TableCell>
+                  <TableCell>{product.price.toFixed(2)} €</TableCell>
+                  <TableCell className="font-mono text-sm">{product.stripe_price_id}</TableCell>
                   <TableCell>
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      {product.status}
+                      Actif
                     </span>
-                  </TableCell>
-                  <TableCell>
-                    <Menubar>
-                      <MenubarMenu>
-                        <MenubarTrigger>Actions</MenubarTrigger>
-                        <MenubarContent className="bg-white">
-                          <MenubarItem>Modifier</MenubarItem>
-                          <MenubarItem>Dupliquer</MenubarItem>
-                          <MenubarSeparator />
-                          <MenubarItem className="text-red-600">Supprimer</MenubarItem>
-                        </MenubarContent>
-                      </MenubarMenu>
-                    </Menubar>
                   </TableCell>
                 </TableRow>
               ))}
+              {!products?.length && (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-8 text-gray-500">
+                    Aucun produit trouvé. Importez un produit depuis Stripe pour commencer.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </Card>
