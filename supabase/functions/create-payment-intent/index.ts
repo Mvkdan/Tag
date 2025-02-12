@@ -13,19 +13,16 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
 
   try {
-    // Get the authorization header from the request
     const authHeader = req.headers.get('Authorization')
     if (!authHeader) {
       throw new Error('No authorization header')
     }
 
-    // Create Supabase client
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
@@ -34,29 +31,39 @@ serve(async (req) => {
       }
     )
 
-    // Get request body
     const { amount, order_data, origin } = await req.json()
 
     if (!origin) {
       throw new Error('Origin URL is required')
     }
 
-    // Séparer les items du reste des données de la commande
     const { items, ...orderDataWithoutItems } = order_data;
 
     // Create the order in pending state
     const { data: order, error: orderError } = await supabaseClient
       .from('orders')
-      .insert([
-        {
-          ...orderDataWithoutItems,
-          status: 'pending',
-        },
-      ])
+      .insert([{
+        ...orderDataWithoutItems,
+        status: 'pending',
+      }])
       .select()
       .single()
 
     if (orderError) throw orderError
+
+    // Get products from database to get their Stripe price IDs
+    const { data: products, error: productsError } = await supabaseClient
+      .from('products')
+      .select('id, stripe_price_id')
+      .in('id', items.map((item: any) => item.product_id))
+
+    if (productsError) throw productsError
+
+    // Create a map of product IDs to Stripe price IDs
+    const priceIdMap = products.reduce((acc: any, product: any) => {
+      acc[product.id] = product.stripe_price_id
+      return acc
+    }, {})
 
     // Create order items
     if (items && items.length > 0) {
@@ -76,18 +83,11 @@ serve(async (req) => {
       if (itemsError) throw itemsError
     }
 
-    // Create a Stripe Checkout Session
+    // Create Stripe Checkout Session using price IDs
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: items.map((item: any) => ({
-        price_data: {
-          currency: 'eur',
-          product_data: {
-            name: item.name,
-            images: [item.image],
-          },
-          unit_amount: Math.round(item.price * 100), // Stripe expects amounts in cents
-        },
+        price: priceIdMap[item.product_id],
         quantity: item.quantity,
       })),
       mode: 'payment',
@@ -106,7 +106,6 @@ serve(async (req) => {
 
     if (updateError) throw updateError
 
-    // Return the session URL
     return new Response(
       JSON.stringify({
         sessionUrl: session.url,
