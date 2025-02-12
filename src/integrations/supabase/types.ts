@@ -54,15 +54,18 @@ export type Database = {
           created_at: string
           discount: number | null
           email: string
+          error_message: string | null
           first_name: string
           id: string
           last_name: string
+          payment_date: string | null
           phone: string
           postal_code: string
           promo_code: string | null
           shipping_cost: number
           shipping_method: string
           status: string
+          status_timeline: Json[] | null
           stripe_payment_intent_id: string | null
           total: number
           user_id: string | null
@@ -73,15 +76,18 @@ export type Database = {
           created_at?: string
           discount?: number | null
           email: string
+          error_message?: string | null
           first_name: string
           id?: string
           last_name: string
+          payment_date?: string | null
           phone: string
           postal_code: string
           promo_code?: string | null
           shipping_cost: number
           shipping_method: string
           status?: string
+          status_timeline?: Json[] | null
           stripe_payment_intent_id?: string | null
           total: number
           user_id?: string | null
@@ -92,15 +98,18 @@ export type Database = {
           created_at?: string
           discount?: number | null
           email?: string
+          error_message?: string | null
           first_name?: string
           id?: string
           last_name?: string
+          payment_date?: string | null
           phone?: string
           postal_code?: string
           promo_code?: string | null
           shipping_cost?: number
           shipping_method?: string
           status?: string
+          status_timeline?: Json[] | null
           stripe_payment_intent_id?: string | null
           total?: number
           user_id?: string | null
