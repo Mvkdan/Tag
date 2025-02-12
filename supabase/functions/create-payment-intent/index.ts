@@ -37,22 +37,15 @@ serve(async (req) => {
     // Get request body
     const { amount, order_data } = await req.json()
 
-    // Create a PaymentIntent with the order amount and currency
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Stripe expects amounts in cents
-      currency: 'eur',
-      automatic_payment_methods: {
-        enabled: true,
-      },
-    })
+    // Créer une copie des données de la commande sans les items
+    const { items, ...orderDataWithoutItems } = order_data;
 
     // Create the order in pending state
     const { data: order, error: orderError } = await supabaseClient
       .from('orders')
       .insert([
         {
-          ...order_data,
-          stripe_payment_intent_id: paymentIntent.id,
+          ...orderDataWithoutItems,
           status: 'pending',
         },
       ])
@@ -62,18 +55,39 @@ serve(async (req) => {
     if (orderError) throw orderError
 
     // Create order items
-    if (order_data.items && order_data.items.length > 0) {
+    if (items && items.length > 0) {
       const { error: itemsError } = await supabaseClient
         .from('order_items')
         .insert(
-          order_data.items.map((item: any) => ({
-            ...item,
+          items.map((item: any) => ({
             order_id: order.id,
+            product_id: item.product_id,
+            quantity: item.quantity,
+            price: item.price,
+            name: item.name,
+            image: item.image
           }))
         )
 
       if (itemsError) throw itemsError
     }
+
+    // Create a PaymentIntent with the order amount and currency
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(amount * 100), // Stripe expects amounts in cents
+      currency: 'eur',
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    })
+
+    // Update order with Stripe payment intent ID
+    const { error: updateError } = await supabaseClient
+      .from('orders')
+      .update({ stripe_payment_intent_id: paymentIntent.id })
+      .eq('id', order.id)
+
+    if (updateError) throw updateError
 
     // Return the client secret and order ID
     return new Response(
