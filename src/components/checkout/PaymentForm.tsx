@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { useStripe, useElements, PaymentElement } from '@stripe/stripe-js';
+import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 
