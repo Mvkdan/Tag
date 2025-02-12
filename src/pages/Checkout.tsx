@@ -14,7 +14,6 @@ import OrderSummary from '@/components/checkout/OrderSummary';
 import StripeWrapper from '@/components/checkout/StripeWrapper';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
 const formSchema = z.object({
@@ -45,7 +44,6 @@ const Checkout = () => {
     finalTotal
   } = useCart();
   const navigate = useNavigate();
-  const { user } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState<string>("");
   const [orderId, setOrderId] = useState<string>("");
@@ -78,15 +76,6 @@ const Checkout = () => {
     try {
       setIsProcessing(true);
 
-      if (!user) {
-        toast({
-          title: "Connexion requise pour finaliser la commande",
-          description: "Veuillez vous connecter pour continuer",
-        });
-        navigate('/auth', { state: { returnTo: '/checkout' } });
-        return;
-      }
-
       const orderData = {
         ...data,
         shipping_method: shippingMethod,
@@ -100,15 +89,13 @@ const Checkout = () => {
           price: item.price,
           name: item.name,
           image: item.image
-        })),
-        user_id: user.id
+        }))
       };
 
       const response = await fetch('/api/create-payment-intent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
         },
         body: JSON.stringify({
           amount: finalTotal,
