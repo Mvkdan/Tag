@@ -9,6 +9,72 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      email_logs: {
+        Row: {
+          error_message: string | null
+          id: string
+          order_id: string | null
+          sent_at: string
+          status: string
+          template_name: string | null
+        }
+        Insert: {
+          error_message?: string | null
+          id?: string
+          order_id?: string | null
+          sent_at?: string
+          status: string
+          template_name?: string | null
+        }
+        Update: {
+          error_message?: string | null
+          id?: string
+          order_id?: string | null
+          sent_at?: string
+          status?: string
+          template_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_logs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_logs_template_name_fkey"
+            columns: ["template_name"]
+            isOneToOne: false
+            referencedRelation: "email_templates"
+            referencedColumns: ["name"]
+          },
+        ]
+      }
+      email_templates: {
+        Row: {
+          created_at: string
+          html_content: string
+          id: string
+          name: string
+          subject: string
+        }
+        Insert: {
+          created_at?: string
+          html_content: string
+          id?: string
+          name: string
+          subject: string
+        }
+        Update: {
+          created_at?: string
+          html_content?: string
+          id?: string
+          name?: string
+          subject?: string
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           id: string
