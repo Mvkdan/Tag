@@ -35,7 +35,11 @@ serve(async (req) => {
     )
 
     // Get request body
-    const { amount, order_data } = await req.json()
+    const { amount, order_data, origin } = await req.json()
+
+    if (!origin) {
+      throw new Error('Origin URL is required')
+    }
 
     // Séparer les items du reste des données de la commande
     const { items, ...orderDataWithoutItems } = order_data;
@@ -87,8 +91,8 @@ serve(async (req) => {
         quantity: item.quantity,
       })),
       mode: 'payment',
-      success_url: `${req.headers.get('origin')}/orders/${order.id}?success=true`,
-      cancel_url: `${req.headers.get('origin')}/checkout?canceled=true`,
+      success_url: `${origin}/orders/${order.id}?success=true`,
+      cancel_url: `${origin}/checkout?canceled=true`,
       metadata: {
         order_id: order.id,
       },

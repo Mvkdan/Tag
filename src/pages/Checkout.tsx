@@ -103,6 +103,7 @@ const Checkout = () => {
         body: {
           amount: finalTotal,
           order_data: orderData,
+          origin: window.location.origin,
         },
       });
 
