@@ -6,10 +6,17 @@ import { toast } from '@/hooks/use-toast';
 import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from 'lucide-react';
+import { Json } from '@/integrations/supabase/types';
 
 interface PaymentFormProps {
   clientSecret: string;
   orderId: string;
+}
+
+interface TimelineEvent {
+  status: string;
+  timestamp: string;
+  message?: string;
 }
 
 const PaymentForm = ({ clientSecret, orderId }: PaymentFormProps) => {
@@ -33,18 +40,30 @@ const PaymentForm = ({ clientSecret, orderId }: PaymentFormProps) => {
   }, [isProcessing]);
 
   const updateOrderStatus = async (status: string, errorMsg?: string) => {
-    const newTimelineEvent = {
+    const newTimelineEvent: TimelineEvent = {
       status,
       timestamp: new Date().toISOString(),
       message: errorMsg
     };
+
+    // Récupérer d'abord l'historique actuel
+    const { data: currentOrder } = await supabase
+      .from('orders')
+      .select('status_timeline')
+      .eq('id', orderId)
+      .single();
+
+    const updatedTimeline: Json[] = [
+      ...(currentOrder?.status_timeline as Json[] || []),
+      newTimelineEvent as Json
+    ];
 
     const { error } = await supabase
       .from('orders')
       .update({ 
         status,
         error_message: errorMsg,
-        status_timeline: status_timeline => [...(status_timeline || []), newTimelineEvent]
+        status_timeline: updatedTimeline
       })
       .eq('id', orderId);
 
