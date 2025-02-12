@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { useCart } from '@/contexts/CartContext';
@@ -75,8 +76,15 @@ const Checkout = () => {
     try {
       setIsProcessing(true);
 
+      // Convertir les données en snake_case pour correspondre au schéma de la base de données
       const orderData = {
-        ...data,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        address: data.address,
+        city: data.city,
+        postal_code: data.postalCode,
+        phone: data.phone,
         shipping_method: shippingMethod,
         shipping_cost: shippingCost,
         total: finalTotal,
