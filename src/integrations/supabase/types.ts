@@ -215,6 +215,44 @@ export type Database = {
         }
         Relationships: []
       }
+      webhook_logs: {
+        Row: {
+          created_at: string | null
+          error_details: string | null
+          id: string
+          processed_at: string | null
+          retry_count: number | null
+          status: string
+          webhook_event_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_details?: string | null
+          id?: string
+          processed_at?: string | null
+          retry_count?: number | null
+          status: string
+          webhook_event_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_details?: string | null
+          id?: string
+          processed_at?: string | null
+          retry_count?: number | null
+          status?: string
+          webhook_event_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "webhook_logs_webhook_event_id_fkey"
+            columns: ["webhook_event_id"]
+            isOneToOne: false
+            referencedRelation: "stripe_webhook_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
