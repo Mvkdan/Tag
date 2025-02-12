@@ -13,10 +13,10 @@ interface PaymentFormProps {
   orderId: string;
 }
 
-interface TimelineEvent {
+type TimelineEvent = {
   status: string;
   timestamp: string;
-  message?: string;
+  message?: string | null;
 }
 
 interface OrderStatus {
@@ -26,10 +26,11 @@ interface OrderStatus {
 
 const useOrderStatus = (orderId: string) => {
   const updateStatus = async ({ status, errorMessage }: OrderStatus) => {
-    const newTimelineEvent: TimelineEvent = {
+    // Créer un objet qui correspond exactement au type Json attendu
+    const timelineEvent: Record<string, string | null> = {
       status,
       timestamp: new Date().toISOString(),
-      message: errorMessage
+      message: errorMessage || null
     };
 
     const { data: currentOrder } = await supabase
@@ -38,16 +39,15 @@ const useOrderStatus = (orderId: string) => {
       .eq('id', orderId)
       .single();
 
-    const updatedTimeline: Json[] = [
-      ...(currentOrder?.status_timeline as Json[] || []),
-      newTimelineEvent as Json
-    ];
+    // Assurez-vous que le tableau existe et est du bon type
+    const currentTimeline = (currentOrder?.status_timeline as Json[]) || [];
+    const updatedTimeline = [...currentTimeline, timelineEvent];
 
     const { error } = await supabase
       .from('orders')
       .update({ 
         status,
-        error_message: errorMessage,
+        error_message: errorMessage || null,
         status_timeline: updatedTimeline
       })
       .eq('id', orderId);
