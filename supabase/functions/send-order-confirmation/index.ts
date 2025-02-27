@@ -19,7 +19,7 @@ serve(async (req) => {
   try {
     const { orderId } = await req.json()
 
-    // Create Supabase client
+    // Create Supabase client avec la clé de service (pour éviter les problèmes RLS)
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
@@ -89,7 +89,8 @@ serve(async (req) => {
     console.error('Error:', error)
 
     // Log error if orderId was provided
-    if (req.orderId) {
+    const requestBody = await req.json().catch(() => ({}));
+    if (requestBody.orderId) {
       const supabaseAdmin = createClient(
         Deno.env.get('SUPABASE_URL') ?? '',
         Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
@@ -98,7 +99,7 @@ serve(async (req) => {
       await supabaseAdmin
         .from('email_logs')
         .insert({
-          order_id: req.orderId,
+          order_id: requestBody.orderId,
           template_name: 'order_confirmation',
           status: 'error',
           error_message: error.message

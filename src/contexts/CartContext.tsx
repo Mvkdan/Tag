@@ -57,19 +57,25 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   }, [items]);
 
   const addItem = (item: CartItem) => {
+    // S'assurer que l'ID est une chaîne de caractères valide
+    const validItem = {
+      ...item,
+      id: String(item.id)
+    };
+    
     setItems(currentItems => {
-      const existingItem = currentItems.find(i => i.id === item.id);
+      const existingItem = currentItems.find(i => i.id === validItem.id);
       const newItems = existingItem
         ? currentItems.map(i =>
-            i.id === item.id 
-              ? { ...i, quantity: i.quantity + item.quantity }
+            i.id === validItem.id 
+              ? { ...i, quantity: i.quantity + validItem.quantity }
               : i
           )
-        : [...currentItems, item];
+        : [...currentItems, validItem];
       
       toast({
         title: "Produit ajouté au panier",
-        description: `${item.name} a été ajouté à votre panier`,
+        description: `${validItem.name} a été ajouté à votre panier`,
       });
       
       return newItems;
